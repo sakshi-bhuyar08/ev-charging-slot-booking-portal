@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Panel — EV ChargePro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:#1a6b3c;--primary-light:#e8f5ee;--accent:#2ecc71;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--white:#ffffff;--bg:#f9fafb;--orange:#c2410c;--orange-light:#fff7ed;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 5%;}
+.logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;}
+.admin-badge{background:var(--orange-light);border:1px solid #fed7aa;color:var(--orange);font-size:0.72rem;font-weight:600;padding:4px 12px;border-radius:50px;}
+.btn-logout{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-logout:hover{border-color:#ef4444;color:#ef4444;}
+
+.layout{display:flex;flex:1;}
+.sidebar{width:220px;flex-shrink:0;padding:20px 14px;border-right:1px solid var(--border);background:var(--white);display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;}
+.sidebar-label{font-size:0.66rem;font-weight:600;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;padding:8px 12px 4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:0.86rem;color:var(--muted);cursor:pointer;transition:all 0.2s;text-decoration:none;border:1px solid transparent;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:var(--orange-light);color:var(--orange);border-color:rgba(194,65,12,0.15);font-weight:500;}
+.nav-item .icon{font-size:1rem;width:20px;text-align:center;}
+
+.main-content{flex:1;padding:28px 32px;overflow-x:hidden;}
+.page-section{display:none;animation:fadeIn 0.3s ease;}
+.page-section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.page-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.page-sub{font-size:0.83rem;color:var(--muted);margin-bottom:22px;}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:22px;}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;transition:transform 0.2s;}
+.stat-card:hover{transform:translateY(-2px);}
+.stat-icon{font-size:1.2rem;margin-bottom:10px;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--orange);}
+.stat-label{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+.stat-change{font-size:0.7rem;color:var(--primary);margin-top:3px;}
+
+.section-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px;}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.section-head h3{font-size:0.93rem;font-weight:600;color:var(--text);}
+.btn-add{background:var(--primary);border:none;color:#fff;padding:8px 16px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:0.78rem;cursor:pointer;}
+.btn-sm-outline{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 11px;border-radius:7px;font-size:0.73rem;cursor:pointer;transition:all 0.2s;}
+.btn-sm-outline:hover{border-color:var(--primary);color:var(--primary);}
+.btn-sm-danger{background:transparent;border:1px solid #fca5a5;color:#ef4444;padding:5px 11px;border-radius:7px;font-size:0.73rem;cursor:pointer;}
+
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+th{padding:9px 12px;text-align:left;color:var(--muted);font-weight:500;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);}
+td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg);}
+.td-m{color:var(--muted);}
+
+.badge{font-size:0.68rem;font-weight:600;padding:3px 10px;border-radius:50px;}
+.badge-confirmed{background:#dcfce7;color:#15803d;}
+.badge-pending{background:#fff7ed;color:#c2410c;}
+.badge-cancelled{background:#fee2e2;color:#b91c1c;}
+.badge-completed{background:var(--bg);color:var(--muted);}
+.badge-active{background:#dcfce7;color:#15803d;}
+.badge-full{background:#fee2e2;color:#b91c1c;}
+
+/* Revenue bars */
+.rev-bars{display:flex;align-items:flex-end;gap:8px;height:110px;margin-top:12px;}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.bar{width:100%;background:var(--orange-light);border:1px solid #fed7aa;border-radius:4px 4px 0 0;transition:height 0.5s ease;}
+.bar-lbl{font-size:0.65rem;color:var(--muted);}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+.form-group label{display:block;font-size:0.76rem;font-weight:500;color:var(--text);margin-bottom:6px;}
+.form-group input,.form-group select{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.86rem;color:var(--text);outline:none;transition:all 0.2s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary);}
+.btn-save{background:var(--primary);border:none;color:#fff;padding:10px 24px;border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.86rem;cursor:pointer;margin-top:14px;}
+
+.search-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.search-input{flex:1;min-width:180px;background:var(--white);border:1.5px solid var(--border);border-radius:9px;padding:9px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.86rem;color:var(--text);outline:none;}
+.search-input:focus{border-color:var(--primary);}
+
+.mob-nav-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);padding:8px 0;z-index:100;}
+.mob-nav{display:flex;justify-content:space-around;}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:0.62rem;color:var(--muted);cursor:pointer;padding:4px 8px;}
+.mob-item .icon{font-size:1.1rem;}
+.mob-item.active{color:var(--orange);}
+
+@media(max-width:768px){.sidebar{display:none;}.main-content{padding:18px 16px 80px;}.mob-nav-bar{display:block;}.two-col{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-dot"></span>EV ChargePro</a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="admin-badge">🔐 Admin Panel</span>
+      <a href="login.html" class="btn-logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <span class="sidebar-label">Dashboard</span>
+    <a class="nav-item active" onclick="showSec('overview',this)"><span class="icon">📊</span>Overview</a>
+    <a class="nav-item" onclick="showSec('bookings',this)"><span class="icon">📅</span>Bookings</a>
+    <a class="nav-item" onclick="showSec('payments',this)"><span class="icon">💳</span>Payments</a>
+    <span class="sidebar-label">Manage</span>
+    <a class="nav-item" onclick="showSec('stations',this)"><span class="icon">📍</span>Stations</a>
+    <a class="nav-item" onclick="showSec('slots',this)"><span class="icon">⏰</span>Slots</a>
+    <a class="nav-item" onclick="showSec('users',this)"><span class="icon">👥</span>Users</a>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- OVERVIEW -->
+    <div class="page-section active" id="sec-overview">
+      <div class="page-title">Admin Dashboard</div>
+      <p class="page-sub">Welcome back, Admin. Here's your platform overview.</p>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-num">324</div><div class="stat-label">Total Bookings</div><div class="stat-change">↑ 12% this week</div></div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-num">89</div><div class="stat-label">Total Users</div><div class="stat-change">↑ 8 new today</div></div>
+        <div class="stat-card"><div class="stat-icon">📍</div><div class="stat-num">12</div><div class="stat-label">Stations</div><div class="stat-change">All active</div></div>
+        <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num">₹48K</div><div class="stat-label">Revenue</div><div class="stat-change">↑ 18% this month</div></div>
+      </div>
+      <div class="two-col">
+        <div class="section-card">
+          <div class="section-head"><h3>Revenue This Week</h3></div>
+          <div class="rev-bars">
+            <div class="bar-wrap"><div class="bar" style="height:40%"></div><span class="bar-lbl">Mon</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:65%"></div><span class="bar-lbl">Tue</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:55%"></div><span class="bar-lbl">Wed</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:80%"></div><span class="bar-lbl">Thu</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:70%"></div><span class="bar-lbl">Fri</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:95%"></div><span class="bar-lbl">Sat</span></div>
+            <div class="bar-wrap"><div class="bar" style="height:85%"></div><span class="bar-lbl">Sun</span></div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-head"><h3>Recent Bookings</h3></div>
+          <table><tr><th>User</th><th>Station</th><th>Status</th></tr>
+          <tr><td>Rahul S.</td><td class="td-m">Kothrud</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+          <tr><td>Priya P.</td><td class="td-m">Hinjewadi</td><td><span class="badge badge-pending">Pending</span></td></tr>
+          <tr><td>Amit K.</td><td class="td-m">Wakad</td><td><span class="badge badge-cancelled">Cancelled</span></td></tr>
+          <tr><td>Sneha R.</td><td class="td-m">Baner</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="page-section" id="sec-bookings">
+      <div class="page-title">All Bookings</div>
+      <p class="page-sub">Manage and track all user bookings</p>
+      <div class="search-bar">
+        <input class="search-input" placeholder="Search by user, station, booking ID..."/>
+        <select style="background:var(--white);border:1.5px solid var(--border);border-radius:9px;padding:9px 13px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;outline:none;">
+          <option>All Status</option><option>Confirmed</option><option>Pending</option><option>Cancelled</option>
+        </select>
+      </div>
+      <div class="section-card">
+        <div class="table-wrap">
+          <table>
+            <tr><th>ID</th><th>User</th><th>Station</th><th>Date & Time</th><th>Amount</th><th>Status</th><th>Action</th></tr>
+            <tr><td class="td-m">#001</td><td>Rahul Sharma</td><td>Kothrud</td><td>20 Apr • 11:00 AM</td><td>₹150</td><td><span class="badge badge-confirmed">Confirmed</span></td><td><button class="btn-sm-danger">Cancel</button></td></tr>
+            <tr><td class="td-m">#002</td><td>Priya Patel</td><td>Hinjewadi</td><td>20 Apr • 02:00 PM</td><td>₹150</td><td><span class="badge badge-pending">Pending</span></td><td><button class="btn-sm-outline">Confirm</button></td></tr>
+            <tr><td class="td-m">#003</td><td>Amit Kumar</td><td>Wakad</td><td>19 Apr • 09:00 AM</td><td>₹150</td><td><span class="badge badge-completed">Completed</span></td><td>—</td></tr>
+            <tr><td class="td-m">#004</td><td>Sneha Rao</td><td>Baner</td><td>19 Apr • 04:00 PM</td><td>₹150</td><td><span class="badge badge-cancelled">Cancelled</span></td><td>—</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="page-section" id="sec-payments">
+      <div class="page-title">Payments</div>
+      <p class="page-sub">Track all payment transactions</p>
+      <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));">
+        <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num">₹45K</div><div class="stat-label">Collected</div></div>
+        <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-num">₹1.5K</div><div class="stat-label">Pending</div></div>
+        <div class="stat-card"><div class="stat-icon">↩️</div><div class="stat-num">₹600</div><div class="stat-label">Refunded</div></div>
+      </div>
+      <div class="section-card">
+        <div class="table-wrap">
+          <table>
+            <tr><th>Pay ID</th><th>Booking ID</th><th>User</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr>
+            <tr><td class="td-m">P001</td><td class="td-m">#001</td><td>Rahul S.</td><td>₹150</td><td>UPI</td><td>20 Apr</td><td><span class="badge badge-confirmed">Paid</span></td></tr>
+            <tr><td class="td-m">P002</td><td class="td-m">#002</td><td>Priya P.</td><td>₹150</td><td>Card</td><td>20 Apr</td><td><span class="badge badge-pending">Pending</span></td></tr>
+            <tr><td class="td-m">P003</td><td class="td-m">#003</td><td>Amit K.</td><td>₹150</td><td>Net Banking</td><td>19 Apr</td><td><span class="badge badge-confirmed">Paid</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATIONS -->
+    <div class="page-section" id="sec-stations">
+      <div class="page-title">Stations</div>
+      <p class="page-sub">Manage charging stations across the network</p>
+      <div class="section-card">
+        <div class="section-head"><h3>Add New Station</h3></div>
+        <div class="form-grid">
+          <div class="form-group"><label>Station Name</label><input type="text" placeholder="e.g. Kothrud EV Station"/></div>
+          <div class="form-group"><label>Location / Address</label><input type="text" placeholder="Near D-Mart, Kothrud, Pune"/></div>
+          <div class="form-group"><label>Total Slots</label><input type="number" placeholder="10"/></div>
+          <div class="form-group"><label>Contact Number</label><input type="tel" placeholder="+91 98765 43210"/></div>
+        </div>
+        <button class="btn-save">+ Add Station</button>
+      </div>
+      <div class="section-card">
+        <div class="section-head"><h3>All Stations</h3></div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>ID</th><th>Station Name</th><th>Location</th><th>Slots</th><th>Contact</th><th>Status</th><th>Action</th></tr>
+            <tr><td class="td-m">S01</td><td>Kothrud EV Station</td><td class="td-m">Kothrud, Pune</td><td>10</td><td class="td-m">+91 98001</td><td><span class="badge badge-active">Active</span></td><td style="display:flex;gap:6px;"><button class="btn-sm-outline">Edit</button><button class="btn-sm-danger">Delete</button></td></tr>
+            <tr><td class="td-m">S02</td><td>Hinjewadi Tech Park</td><td class="td-m">Hinjewadi, Pune</td><td>8</td><td class="td-m">+91 98002</td><td><span class="badge badge-active">Active</span></td><td style="display:flex;gap:6px;"><button class="btn-sm-outline">Edit</button><button class="btn-sm-danger">Delete</button></td></tr>
+            <tr><td class="td-m">S03</td><td>Wakad Station</td><td class="td-m">Wakad, Pune</td><td>12</td><td class="td-m">+91 98003</td><td><span class="badge badge-full">Full</span></td><td style="display:flex;gap:6px;"><button class="btn-sm-outline">Edit</button><button class="btn-sm-danger">Delete</button></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLOTS -->
+    <div class="page-section" id="sec-slots">
+      <div class="page-title">Manage Slots</div>
+      <p class="page-sub">Add and manage time slots for each station</p>
+      <div class="section-card">
+        <div class="section-head"><h3>Add New Slot</h3></div>
+        <div class="form-grid">
+          <div class="form-group"><label>Station</label><select><option>Kothrud EV Station</option><option>Hinjewadi Tech Park</option><option>Wakad Station</option></select></div>
+          <div class="form-group"><label>Slot Date & Time</label><input type="datetime-local"/></div>
+          <div class="form-group"><label>Availability</label><select><option>Available</option><option>Booked</option><option>Maintenance</option></select></div>
+        </div>
+        <button class="btn-save">+ Add Slot</button>
+      </div>
+      <div class="section-card">
+        <div class="section-head"><h3>All Slots</h3></div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Slot ID</th><th>Station</th><th>Date & Time</th><th>Status</th><th>Action</th></tr>
+            <tr><td class="td-m">SL01</td><td>Kothrud</td><td>20 Apr • 09:00 AM</td><td><span class="badge badge-active">Available</span></td><td><button class="btn-sm-outline">Edit</button></td></tr>
+            <tr><td class="td-m">SL02</td><td>Kothrud</td><td>20 Apr • 10:00 AM</td><td><span class="badge badge-confirmed">Booked</span></td><td><button class="btn-sm-outline">Edit</button></td></tr>
+            <tr><td class="td-m">SL03</td><td>Hinjewadi</td><td>20 Apr • 11:00 AM</td><td><span class="badge badge-active">Available</span></td><td><button class="btn-sm-outline">Edit</button></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div class="page-section" id="sec-users">
+      <div class="page-title">Users</div>
+      <p class="page-sub">Manage registered users</p>
+      <div class="search-bar"><input class="search-input" placeholder="Search by name, email, vehicle number..."/></div>
+      <div class="section-card">
+        <div class="table-wrap">
+          <table>
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Vehicle No</th><th>Bookings</th><th>Action</th></tr>
+            <tr><td class="td-m">U01</td><td>Rahul Sharma</td><td class="td-m">rahul@ex.com</td><td class="td-m">+91 98765</td><td>MH12AB1234</td><td>12</td><td><button class="btn-sm-danger">Block</button></td></tr>
+            <tr><td class="td-m">U02</td><td>Priya Patel</td><td class="td-m">priya@ex.com</td><td class="td-m">+91 98766</td><td>MH14CD5678</td><td>5</td><td><button class="btn-sm-danger">Block</button></td></tr>
+            <tr><td class="td-m">U03</td><td>Amit Kumar</td><td class="td-m">amit@ex.com</td><td class="td-m">+91 98767</td><td>MH12EF9012</td><td>8</td><td><button class="btn-sm-danger">Block</button></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="mob-nav-bar">
+  <div class="mob-nav">
+    <div class="mob-item active" onclick="showSec('overview',this)"><span class="icon">📊</span>Overview</div>
+    <div class="mob-item" onclick="showSec('bookings',this)"><span class="icon">📅</span>Bookings</div>
+    <div class="mob-item" onclick="showSec('stations',this)"><span class="icon">📍</span>Stations</div>
+    <div class="mob-item" onclick="showSec('users',this)"><span class="icon">👥</span>Users</div>
+  </div>
+</div>
+
+<script>
+function showSec(name,el){document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));document.getElementById('sec-'+name).classList.add('active');document.querySelectorAll('.nav-item,.mob-item').forEach(i=>i.classList.remove('active'));if(el)el.classList.add('active');}
+</script>
+</body>
+</html>

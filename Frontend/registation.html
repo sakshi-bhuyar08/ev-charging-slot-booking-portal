@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Register — EV ChargePro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:#1a6b3c;--primary-light:#e8f5ee;--accent:#2ecc71;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--white:#ffffff;--bg:#f9fafb;--error:#ef4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--white);color:var(--text);min-height:100vh;display:flex;}
+
+.left-panel{width:44%;background:var(--primary);display:flex;flex-direction:column;justify-content:space-between;padding:48px;position:relative;overflow:hidden;}
+.left-panel::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,0.04);top:-100px;right:-150px;}
+.left-panel::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.04);bottom:-50px;left:-80px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px;position:relative;z-index:1;}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;}
+
+.panel-mid{position:relative;z-index:1;}
+.panel-mid h2{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:16px;}
+.panel-mid p{color:rgba(255,255,255,0.7);font-size:0.92rem;line-height:1.75;margin-bottom:32px;}
+.panel-img{width:100%;border-radius:16px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,0.2);}
+.panel-img img{width:100%;height:220px;object-fit:cover;display:block;}
+
+.perks{display:flex;flex-direction:column;gap:12px;position:relative;z-index:1;}
+.perk{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.08);border-radius:10px;padding:11px 14px;}
+.perk-icon{font-size:1rem;}
+.perk span{font-size:0.82rem;color:rgba(255,255,255,0.85);}
+
+.right-panel{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 5%;overflow-y:auto;}
+.form-box{width:100%;max-width:420px;}
+.form-header{margin-bottom:28px;}
+.form-header h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.form-header p{font-size:0.85rem;color:var(--muted);}
+.form-header a{color:var(--primary);text-decoration:none;font-weight:500;}
+
+/* Step dots */
+.step-dots{display:flex;gap:6px;margin-bottom:28px;}
+.dot{height:4px;border-radius:4px;flex:1;background:var(--border);transition:all 0.3s;}
+.dot.active{background:var(--primary);}
+.dot.done{background:var(--accent);}
+.step-label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;color:var(--primary);text-transform:uppercase;margin-bottom:18px;}
+
+.form-step{display:none;}
+.form-step.active{display:block;animation:slideIn 0.3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateX(16px);}to{opacity:1;transform:translateX(0);}}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:0.8rem;font-weight:500;color:var(--text);margin-bottom:7px;}
+.form-group input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;color:var(--text);outline:none;transition:all 0.2s;}
+.form-group input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px var(--primary-light);}
+.form-group input::placeholder{color:#c1c8d0;}
+.error-msg{font-size:0.73rem;color:var(--error);margin-top:4px;display:none;}
+
+.pwd-wrap{position:relative;}
+.pwd-wrap input{padding-right:44px;}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:0.95rem;color:var(--muted);}
+
+.strength-bar{display:flex;gap:4px;margin-top:8px;}
+.s-seg{height:3px;flex:1;border-radius:4px;background:var(--border);transition:background 0.3s;}
+.strength-label{font-size:0.72rem;color:var(--muted);margin-top:4px;}
+
+.btn-next,.btn-submit{width:100%;background:var(--primary);border:none;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.95rem;padding:14px;border-radius:10px;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+.btn-next:hover,.btn-submit:hover{background:#155c32;transform:translateY(-1px);}
+.btn-back{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;padding:12px;border-radius:10px;cursor:pointer;transition:all 0.2s;margin-top:10px;}
+.btn-back:hover{border-color:var(--primary);color:var(--primary);}
+.terms{font-size:0.73rem;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6;}
+.terms a{color:var(--primary);text-decoration:none;}
+
+.success-screen{display:none;text-align:center;padding:20px 0;animation:fadeUp 0.5s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.success-icon{width:80px;height:80px;background:var(--primary-light);border:2px solid var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px;animation:pop 0.4s ease both;}
+@keyframes pop{from{transform:scale(0.4);opacity:0;}to{transform:scale(1);opacity:1;}}
+.success-screen h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text);margin-bottom:8px;}
+.success-screen p{color:var(--muted);font-size:0.88rem;margin-bottom:24px;}
+
+@media(max-width:768px){
+  body{flex-direction:column;}
+  .left-panel{width:100%;padding:28px 20px;min-height:auto;}
+  .panel-img{display:none;}
+  .perks{flex-direction:row;overflow-x:auto;padding-bottom:4px;}
+  .perk{min-width:180px;}
+  .right-panel{padding:32px 20px;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="left-panel">
+  <a class="logo" href="index.html"><span class="logo-dot"></span>EV ChargePro</a>
+  <div class="panel-mid">
+    <h2>Join India's Smartest EV Network</h2>
+    <p>Create your free account and book charging slots at 50+ stations across the city instantly.</p>
+    <div class="panel-img">
+      <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=600&q=80" alt="EV Charging"/>
+    </div>
+  </div>
+  <div class="perks">
+    <div class="perk"><span class="perk-icon">⚡</span><span>Instant Booking</span></div>
+    <div class="perk"><span class="perk-icon">🔒</span><span>Secure Payments</span></div>
+    <div class="perk"><span class="perk-icon">📊</span><span>Smart Dashboard</span></div>
+    <div class="perk"><span class="perk-icon">📍</span><span>50+ Stations</span></div>
+  </div>
+</div>
+
+<div class="right-panel">
+  <div class="form-box">
+    <div class="form-header">
+      <h1>Create Account</h1>
+      <p>Already have an account? <a href="login.html">Sign in →</a></p>
+    </div>
+
+    <div class="step-dots">
+      <div class="dot active" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="form-step active" id="step1">
+      <div class="step-label">Step 1 of 3 — Personal Info</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="fname" placeholder="Rahul"/>
+          <span class="error-msg" id="err-fname">Enter first name</span>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lname" placeholder="Sharma"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="rahul@example.com"/>
+        <span class="error-msg" id="err-email">Enter a valid email</span>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="phone" placeholder="+91 98765 43210" maxlength="13"/>
+        <span class="error-msg" id="err-phone">Enter valid phone number</span>
+      </div>
+      <button class="btn-next" onclick="goStep(2)">Continue →</button>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="form-step" id="step2">
+      <div class="step-label">Step 2 of 3 — Vehicle Details</div>
+      <div class="form-group">
+        <label>Vehicle Number</label>
+        <input type="text" id="vehicle" placeholder="MH12AB1234" style="text-transform:uppercase"/>
+        <span class="error-msg" id="err-vehicle">Enter vehicle number</span>
+      </div>
+      <div class="form-group">
+        <label>Vehicle Model</label>
+        <input type="text" id="vmodel" placeholder="e.g. Tata Nexon EV, Ather 450"/>
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" id="city" placeholder="Pune"/>
+      </div>
+      <button class="btn-next" onclick="goStep(3)">Continue →</button>
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="form-step" id="step3">
+      <div class="step-label">Step 3 of 3 — Set Password</div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pwd-wrap">
+          <input type="password" id="password" placeholder="Min 8 characters" oninput="checkStrength(this.value)"/>
+          <button class="eye-btn" onclick="togglePwd('password')">👁</button>
+        </div>
+        <div class="strength-bar">
+          <div class="s-seg" id="s1"></div>
+          <div class="s-seg" id="s2"></div>
+          <div class="s-seg" id="s3"></div>
+          <div class="s-seg" id="s4"></div>
+        </div>
+        <div class="strength-label" id="s-label">Enter password</div>
+        <span class="error-msg" id="err-pwd">Min 8 characters required</span>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="pwd-wrap">
+          <input type="password" id="cpwd" placeholder="Re-enter password"/>
+          <button class="eye-btn" onclick="togglePwd('cpwd')">👁</button>
+        </div>
+        <span class="error-msg" id="err-cpwd">Passwords do not match</span>
+      </div>
+      <button class="btn-submit" onclick="submitForm()">Create Account 🎉</button>
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <p class="terms">By registering you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a></p>
+    </div>
+
+    <!-- Success -->
+    <div class="success-screen" id="success">
+      <div class="success-icon">✓</div>
+      <h2>Welcome Aboard!</h2>
+      <p>Your account has been created successfully. Start booking your EV charging slots now.</p>
+      <a href="login.html" class="btn-next" style="text-decoration:none;display:block;text-align:center;">Go to Login →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+let cur=1;
+function goStep(n){
+  if(n>cur&&!validate(cur))return;
+  document.getElementById('step'+cur).classList.remove('active');
+  cur=n;
+  document.getElementById('step'+cur).classList.add('active');
+  updateDots();
+}
+function updateDots(){
+  for(let i=1;i<=3;i++){
+    const d=document.getElementById('dot'+i);
+    d.className='dot';
+    if(i<cur)d.classList.add('done');
+    if(i===cur)d.classList.add('active');
+  }
+}
+function validate(s){
+  let ok=true;
+  const hide=id=>document.getElementById(id).style.display='none';
+  const show=id=>document.getElementById(id).style.display='block';
+  if(s===1){
+    hide('err-fname');hide('err-email');hide('err-phone');
+    if(!document.getElementById('fname').value.trim()){show('err-fname');ok=false;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value)){show('err-email');ok=false;}
+    if(document.getElementById('phone').value.length<10){show('err-phone');ok=false;}
+  }
+  if(s===2){
+    hide('err-vehicle');
+    if(!document.getElementById('vehicle').value.trim()){show('err-vehicle');ok=false;}
+  }
+  return ok;
+}
+async function submitForm() {
+  const pwd = document.getElementById('password').value;
+  const cpwd = document.getElementById('cpwd').value;
+  
+  document.getElementById('err-pwd').style.display = 'none';
+  document.getElementById('err-cpwd').style.display = 'none';
+  
+  if (pwd.length < 8) {
+    document.getElementById('err-pwd').style.display = 'block';
+    return;
+  }
+  if (pwd !== cpwd) {
+    document.getElementById('err-cpwd').style.display = 'block';
+    return;
+  }
+
+  // Spring Boot ko data bhejo
+  const userData = {
+    name: document.getElementById('fname').value + ' ' + document.getElementById('lname').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    vehicleNo: document.getElementById('vehicle').value,
+    password: document.getElementById('password').value
+  };
+
+  try {
+    const response = await fetch('http://localhost:8080/api/users/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+
+    if (response.ok) {
+      document.getElementById('step3').classList.remove('active');
+      document.getElementById('success').style.display = 'block';
+    } else {
+      alert('Registration failed! Try again.');
+    }
+  } catch (error) {
+    alert('Server not connected! Make sure Spring Boot is running.');
+  }
+}
+function checkStrength(v){
+  const segs=[document.getElementById('s1'),document.getElementById('s2'),document.getElementById('s3'),document.getElementById('s4')];
+  const lbl=document.getElementById('s-label');
+  let sc=0;
+  if(v.length>=8)sc++;if(/[A-Z]/.test(v))sc++;if(/[0-9]/.test(v))sc++;if(/[^A-Za-z0-9]/.test(v))sc++;
+  const colors=['#ef4444','#f97316','#eab308','#22c55e'];
+  const labels=['Weak','Fair','Good','Strong'];
+  segs.forEach((s,i)=>{s.style.background=i<sc?colors[sc-1]:''});
+  lbl.textContent=v?(labels[sc-1]||'Too weak'):'Enter password';
+  lbl.style.color=v&&sc>0?colors[sc-1]:'var(--muted)';
+}
+function togglePwd(id){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';}
+</script>
+</body>
+</html>

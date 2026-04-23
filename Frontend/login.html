@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login — EV ChargePro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:#1a6b3c;--primary-light:#e8f5ee;--accent:#2ecc71;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--white:#ffffff;--bg:#f9fafb;--error:#ef4444;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background:url('https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1200&q=60') center/cover;opacity:0.06;pointer-events:none;}
+.login-wrap{width:100%;max-width:440px;position:relative;z-index:1;animation:fadeUp 0.6s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.logo-row{text-align:center;margin-bottom:28px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--primary);text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:36px;box-shadow:0 8px 40px rgba(0,0,0,0.06);}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:3px;margin:-36px -36px 32px;}
+.tabs{display:flex;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:24px;gap:4px;}
+.tab{flex:1;padding:9px;border-radius:8px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.25s;background:transparent;color:var(--muted);}
+.tab.active{background:var(--white);color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,0.08);font-weight:600;}
+h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:4px;}
+.subtitle{font-size:0.84rem;color:var(--muted);margin-bottom:24px;}
+.subtitle a{color:var(--primary);text-decoration:none;font-weight:500;}
+.form-group{margin-bottom:16px;position:relative;}
+.form-group label{display:block;font-size:0.8rem;font-weight:500;color:var(--text);margin-bottom:6px;}
+.form-group input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 44px 12px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;color:var(--text);outline:none;transition:all 0.2s;}
+.form-group input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px var(--primary-light);}
+.form-group input::placeholder{color:#c1c8d0;}
+.eye-btn{position:absolute;right:12px;top:36px;background:none;border:none;cursor:pointer;font-size:0.95rem;color:var(--muted);}
+.error-msg{font-size:0.73rem;color:var(--error);margin-top:4px;display:none;}
+.forgot{text-align:right;margin:-8px 0 18px;}
+.forgot a{font-size:0.78rem;color:var(--primary);text-decoration:none;}
+.btn-login{width:100%;background:var(--primary);border:none;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.95rem;padding:13px;border-radius:10px;cursor:pointer;transition:all 0.2s;}
+.btn-login:hover{background:#155c32;transform:translateY(-1px);}
+.admin-badge{display:inline-flex;align-items:center;gap:6px;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;font-size:0.72rem;font-weight:600;padding:4px 12px;border-radius:50px;margin-bottom:14px;}
+.panel-hidden{display:none;}
+.bottom-text{text-align:center;font-size:0.82rem;color:var(--muted);margin-top:20px;}
+.bottom-text a{color:var(--primary);text-decoration:none;font-weight:500;}
+@media(max-width:480px){.card{padding:24px 20px;}}
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="logo-row"><a class="logo" href="index.html"><span class="logo-dot"></span>EV ChargePro</a></div>
+  <div class="card">
+    <div class="top-bar"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('user',this)">User Login</button>
+      <button class="tab" onclick="switchTab('admin',this)">Admin Login</button>
+    </div>
+    <div id="user-panel">
+      <h1>Welcome back 👋</h1>
+      <p class="subtitle">No account? <a href="register.html">Sign up free →</a></p>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="u-email" placeholder="rahul@example.com"/>
+        <span class="error-msg" id="err-uemail">Enter a valid email</span>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="u-pwd" placeholder="Your password"/>
+        <button class="eye-btn" onclick="togglePwd('u-pwd')">👁</button>
+        <span class="error-msg" id="err-upwd">Password is required</span>
+      </div>
+      <div class="forgot"><a href="#">Forgot password?</a></div>
+      <button class="btn-login" onclick="doLogin('user')">Login to Account →</button>
+    </div>
+    <div id="admin-panel" class="panel-hidden">
+      <div class="admin-badge">🔐 Admin Access Only</div>
+      <h1>Admin Portal</h1>
+      <p class="subtitle">Manage stations, slots & bookings</p>
+      <div class="form-group">
+        <label>Admin Email</label>
+        <input type="email" id="a-email" placeholder="admin@evchargepro.com"/>
+        <span class="error-msg" id="err-aemail">Enter admin email</span>
+      </div>
+      <div class="form-group">
+        <label>Admin Password</label>
+        <input type="password" id="a-pwd" placeholder="Admin password"/>
+        <button class="eye-btn" onclick="togglePwd('a-pwd')">👁</button>
+        <span class="error-msg" id="err-apwd">Password is required</span>
+      </div>
+      <button class="btn-login" style="background:#c2410c;" onclick="doLogin('admin')">Access Admin Panel →</button>
+    </div>
+  </div>
+  <div class="bottom-text">New to EVChargePro? <a href="register.html">Create account →</a></div>
+</div>
+<script>
+function switchTab(type,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');const up=document.getElementById('user-panel'),ap=document.getElementById('admin-panel');if(type==='user'){up.classList.remove('panel-hidden');ap.classList.add('panel-hidden');}else{ap.classList.remove('panel-hidden');up.classList.add('panel-hidden');}}
+function togglePwd(id){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';}
+async function doLogin(type) {
+  let ok = true;
+
+  if (type === 'user') {
+    const email = document.getElementById('u-email').value;
+    const pwd = document.getElementById('u-pwd').value;
+
+    document.getElementById('err-uemail').style.display =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'none' : (ok = false, 'block');
+    document.getElementById('err-upwd').style.display =
+      pwd ? 'none' : (ok = false, 'block');
+
+    if (!ok) return;
+
+    try {
+      const response = await fetch('http://localhost:8080/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pwd })
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        // User data save karo
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('userId', user.userId);
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('Invalid email or password!');
+      }
+    } catch (error) {
+      alert('Server not connected!');
+    }
+
+  } else {
+    // Admin login same rakho abhi
+    const email = document.getElementById('a-email').value;
+    const pwd = document.getElementById('a-pwd').value;
+    document.getElementById('err-aemail').style.display = email ? 'none' : (ok = false, 'block');
+    document.getElementById('err-apwd').style.display = pwd ? 'none' : (ok = false, 'block');
+    if (ok) window.location.href = 'admin.html';
+  }
+}
+</script>
+</body>
+</html>

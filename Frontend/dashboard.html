@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book a Slot — EV ChargePro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:#1a6b3c;--primary-light:#e8f5ee;--accent:#2ecc71;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--white:#ffffff;--bg:#f9fafb;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 5%;}
+.logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-link{font-size:0.84rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--primary);}
+.btn-sm{background:var(--primary);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:0.82rem;cursor:pointer;text-decoration:none;}
+
+.main{max-width:1200px;margin:0 auto;padding:32px 5% 60px;}
+.page-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text);margin-bottom:4px;}
+.page-sub{font-size:0.86rem;color:var(--muted);margin-bottom:28px;}
+
+/* Progress */
+.progress{display:flex;align-items:center;margin-bottom:36px;overflow-x:auto;padding-bottom:4px;}
+.prog-step{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.prog-circle{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:600;color:var(--muted);transition:all 0.3s;}
+.prog-circle.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary);}
+.prog-circle.done{border-color:var(--primary);background:var(--primary);color:#fff;}
+.prog-label{font-size:0.78rem;color:var(--muted);white-space:nowrap;}
+.prog-label.active{color:var(--primary);font-weight:600;}
+.prog-line{flex:1;min-width:30px;height:2px;background:var(--border);margin:0 8px;}
+.prog-line.done{background:var(--primary);}
+
+.grid{display:grid;grid-template-columns:1fr 320px;gap:24px;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:20px;}
+.card-title{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:0.78rem;font-weight:500;color:var(--text);margin-bottom:6px;}
+.form-group input,.form-group select{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:all 0.2s;appearance:none;}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px var(--primary-light);}
+
+/* Station cards */
+.station-list{display:flex;flex-direction:column;gap:10px;}
+.station-card{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.station-card:hover,.station-card.selected{border-color:var(--primary);background:var(--primary-light);}
+.station-img{width:52px;height:52px;border-radius:10px;object-fit:cover;flex-shrink:0;}
+.station-info h4{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:3px;}
+.station-info p{font-size:0.75rem;color:var(--muted);}
+.station-meta{text-align:right;flex-shrink:0;}
+.avail-badge{font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--primary-light);color:var(--primary);display:inline-block;margin-bottom:3px;}
+.dist{font-size:0.72rem;color:var(--muted);}
+
+/* Slots */
+.legend{display:flex;gap:14px;margin-bottom:12px;font-size:0.73rem;color:var(--muted);flex-wrap:wrap;}
+.leg{display:flex;align-items:center;gap:5px;}
+.leg-dot{width:10px;height:10px;border-radius:3px;}
+.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;}
+.slot-btn{padding:11px 6px;border-radius:9px;border:1.5px solid var(--border);background:var(--white);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:center;}
+.slot-btn.available:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
+.slot-btn.selected{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600;}
+.slot-btn.booked{background:var(--bg);border-color:var(--border);color:#c1c8d0;cursor:not-allowed;}
+
+/* Summary */
+.summary-card{position:sticky;top:80px;}
+.sum-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.84rem;}
+.sum-row .lbl{color:var(--muted);}
+.sum-row .val{font-weight:500;color:var(--text);}
+.total-row{display:flex;justify-content:space-between;padding:14px 0 0;margin-top:4px;}
+.total-row .lbl{font-size:0.9rem;font-weight:600;color:var(--text);}
+.total-row .val{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--primary);}
+.btn-book{width:100%;background:var(--primary);border:none;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.95rem;padding:14px;border-radius:10px;cursor:pointer;transition:all 0.2s;margin-top:14px;}
+.btn-book:hover{background:#155c32;transform:translateY(-1px);}
+.info-tip{background:var(--primary-light);border:1px solid rgba(26,107,60,0.15);border-radius:10px;padding:12px 14px;font-size:0.78rem;color:var(--primary);line-height:1.6;}
+
+@media(max-width:900px){.grid{grid-template-columns:1fr;}.summary-card{position:static;}.form-row2{grid-template-columns:1fr;}}
+@media(max-width:560px){.main{padding:20px 16px 50px;}.slots-grid{grid-template-columns:repeat(auto-fill,minmax(75px,1fr));}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html"><span class="logo-dot"></span>EV ChargePro</a>
+    <div class="nav-right">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="login.html" class="btn-sm">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="page-title">Book a Charging Slot</div>
+  <p class="page-sub">Select your station, date and time to reserve your spot</p>
+
+  <div class="progress">
+    <div class="prog-step"><div class="prog-circle done">✓</div><span class="prog-label">Login</span></div>
+    <div class="prog-line done"></div>
+    <div class="prog-step"><div class="prog-circle active">2</div><span class="prog-label active">Select Slot</span></div>
+    <div class="prog-line"></div>
+    <div class="prog-step"><div class="prog-circle">3</div><span class="prog-label">Payment</span></div>
+    <div class="prog-line"></div>
+    <div class="prog-step"><div class="prog-circle">4</div><span class="prog-label">Confirmed</span></div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <div class="card-title">📋 Booking Details</div>
+        <div class="form-row2">
+          <div class="form-group"><label>Booking Date</label><input type="date" id="bdate" onchange="updateSummary()"/></div>
+          <div class="form-group"><label>Vehicle Number</label><input type="text" id="vnum" placeholder="MH12AB1234" oninput="updateSummary()"/></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📍 Choose Station</div>
+        <div class="station-list">
+          <div class="station-card selected" onclick="selectStation(this,'Kothrud EV Station')">
+            <img class="station-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt="Station"/>
+            <div class="station-info"><h4>Kothrud EV Station</h4><p>Near D-Mart, Kothrud, Pune</p></div>
+            <div class="station-meta"><div class="avail-badge">8 free</div><div class="dist">1.2 km</div></div>
+          </div>
+          <div class="station-card" onclick="selectStation(this,'Hinjewadi Tech Park')">
+            <img class="station-img" src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=200&q=80" alt="Station"/>
+            <div class="station-info"><h4>Hinjewadi Tech Park</h4><p>Phase 1, Hinjewadi, Pune</p></div>
+            <div class="station-meta"><div class="avail-badge">5 free</div><div class="dist">4.8 km</div></div>
+          </div>
+          <div class="station-card" onclick="selectStation(this,'Wakad Station')">
+            <img class="station-img" src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=200&q=80" alt="Station"/>
+            <div class="station-info"><h4>Wakad Station</h4><p>Wakad Bridge, Pune</p></div>
+            <div class="station-meta"><div class="avail-badge">12 free</div><div class="dist">3.1 km</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⏰ Select Time Slot</div>
+        <div class="legend">
+          <span class="leg"><span class="leg-dot" style="background:var(--border);border:1px solid var(--border)"></span>Available</span>
+          <span class="leg"><span class="leg-dot" style="background:var(--primary)"></span>Selected</span>
+          <span class="leg"><span class="leg-dot" style="background:#fee2e2"></span>Booked</span>
+        </div>
+        <div class="slots-grid" id="slots-grid"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card summary-card">
+        <div class="card-title">🧾 Booking Summary</div>
+        <div class="sum-row"><span class="lbl">Station</span><span class="val" id="sum-station">Kothrud EV</span></div>
+        <div class="sum-row"><span class="lbl">Date</span><span class="val" id="sum-date">—</span></div>
+        <div class="sum-row"><span class="lbl">Time</span><span class="val" id="sum-time">—</span></div>
+        <div class="sum-row"><span class="lbl">Vehicle</span><span class="val" id="sum-vehicle">—</span></div>
+        <div class="sum-row"><span class="lbl">Duration</span><span class="val">1 Hour</span></div>
+        <div class="sum-row"><span class="lbl">Rate</span><span class="val">₹2/min</span></div>
+        <div class="total-row"><span class="lbl">Total</span><span class="val">₹150</span></div>
+        <button class="btn-book" onclick="proceedToPayment()">Proceed to Pay →</button>
+        <p style="font-size:0.72rem;color:var(--muted);text-align:center;margin-top:10px;">Free cancellation up to 1 hr before</p>
+      </div>
+      <div class="card"><div class="info-tip">⚡ <strong>Tip:</strong> Book at least 30 mins in advance. Peak hours: 8–10 AM and 6–9 PM.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const slots=[
+  {time:'06:00 AM',status:'available'},{time:'07:00 AM',status:'booked'},
+  {time:'08:00 AM',status:'booked'},{time:'09:00 AM',status:'available'},
+  {time:'10:00 AM',status:'available'},{time:'11:00 AM',status:'booked'},
+  {time:'12:00 PM',status:'available'},{time:'01:00 PM',status:'available'},
+  {time:'02:00 PM',status:'booked'},{time:'03:00 PM',status:'available'},
+  {time:'04:00 PM',status:'available'},{time:'05:00 PM',status:'booked'},
+  {time:'06:00 PM',status:'available'},{time:'07:00 PM',status:'available'},
+  {time:'08:00 PM',status:'booked'},{time:'09:00 PM',status:'available'},
+];
+let selTime=null,selStation='Kothrud EV Station';
+function renderSlots(){
+  document.getElementById('slots-grid').innerHTML=slots.map(s=>`
+    <button class="slot-btn ${s.status} ${selTime===s.time?'selected':''}"
+      onclick="${s.status==='booked'?'':` selectSlot('${s.time}')`}"
+      ${s.status==='booked'?'disabled':''}>
+      ${s.time}
+    </button>`).join('');
+}
+function selectSlot(time){selTime=time;document.getElementById('sum-time').textContent=time;renderSlots();}
+function selectStation(el,name){document.querySelectorAll('.station-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');selStation=name;document.getElementById('sum-station').textContent=name;}
+function updateSummary(){
+  const d=document.getElementById('bdate').value,v=document.getElementById('vnum').value;
+  if(d)document.getElementById('sum-date').textContent=new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  if(v)document.getElementById('sum-vehicle').textContent=v.toUpperCase();
+}
+function proceedToPayment(){
+  if(!document.getElementById('bdate').value||!document.getElementById('vnum').value||!selTime){alert('Please fill all details and select a time slot!');return;}
+  window.location.href='payment.html';
+}
+const today=new Date().toISOString().split('T')[0];
+document.getElementById('bdate').value=today;
+document.getElementById('bdate').min=today;
+updateSummary();renderSlots();
+</script>
+</body>
+</html>
