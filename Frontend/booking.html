@@ -271,8 +271,8 @@ async function proceedToPayment() {
       station: { stationId: selStationId },
       slot: { slotId: selSlotId },
       bookingDate: date,
-      bookingTime: selTime + ':00',
-      status: 'pending'
+      bookingTime: '00:00:00',
+      status: 'confirmed',
     };
 
     const res = await fetch(`${API}/api/bookings/create`, {
