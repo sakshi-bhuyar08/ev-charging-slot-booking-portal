@@ -3,80 +3,81 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Book a Slot — EV ChargePro</title>
+<title>Dashboard — EV ChargePro</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{--primary:#1a6b3c;--primary-light:#e8f5ee;--accent:#2ecc71;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--white:#ffffff;--bg:#f9fafb;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
 nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
-.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 5%;}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 5%;}
 .logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:8px;}
 .logo-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;}
-.nav-right{display:flex;align-items:center;gap:10px;}
-.nav-link{font-size:0.84rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
-.nav-link:hover{color:var(--primary);}
-.btn-sm{background:var(--primary);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:0.82rem;cursor:pointer;text-decoration:none;}
-
-.main{max-width:1200px;margin:0 auto;padding:32px 5% 60px;}
-.page-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text);margin-bottom:4px;}
-.page-sub{font-size:0.86rem;color:var(--muted);margin-bottom:28px;}
-
-/* Progress */
-.progress{display:flex;align-items:center;margin-bottom:36px;overflow-x:auto;padding-bottom:4px;}
-.prog-step{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.prog-circle{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:600;color:var(--muted);transition:all 0.3s;}
-.prog-circle.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary);}
-.prog-circle.done{border-color:var(--primary);background:var(--primary);color:#fff;}
-.prog-label{font-size:0.78rem;color:var(--muted);white-space:nowrap;}
-.prog-label.active{color:var(--primary);font-weight:600;}
-.prog-line{flex:1;min-width:30px;height:2px;background:var(--border);margin:0 8px;}
-.prog-line.done{background:var(--primary);}
-
-.grid{display:grid;grid-template-columns:1fr 320px;gap:24px;}
-.card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:20px;}
-.card-title{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.form-group{margin-bottom:14px;}
-.form-group label{display:block;font-size:0.78rem;font-weight:500;color:var(--text);margin-bottom:6px;}
-.form-group input,.form-group select{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:all 0.2s;appearance:none;}
-.form-group input:focus,.form-group select:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px var(--primary-light);}
-
-/* Station cards */
-.station-list{display:flex;flex-direction:column;gap:10px;}
-.station-card{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.station-card:hover,.station-card.selected{border-color:var(--primary);background:var(--primary-light);}
-.station-img{width:52px;height:52px;border-radius:10px;object-fit:cover;flex-shrink:0;}
-.station-info h4{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:3px;}
-.station-info p{font-size:0.75rem;color:var(--muted);}
-.station-meta{text-align:right;flex-shrink:0;}
-.avail-badge{font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:50px;background:var(--primary-light);color:var(--primary);display:inline-block;margin-bottom:3px;}
-.dist{font-size:0.72rem;color:var(--muted);}
-
-/* Slots */
-.legend{display:flex;gap:14px;margin-bottom:12px;font-size:0.73rem;color:var(--muted);flex-wrap:wrap;}
-.leg{display:flex;align-items:center;gap:5px;}
-.leg-dot{width:10px;height:10px;border-radius:3px;}
-.slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;}
-.slot-btn{padding:11px 6px;border-radius:9px;border:1.5px solid var(--border);background:var(--white);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:center;}
-.slot-btn.available:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
-.slot-btn.selected{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:600;}
-.slot-btn.booked{background:var(--bg);border-color:var(--border);color:#c1c8d0;cursor:not-allowed;}
-
-/* Summary */
-.summary-card{position:sticky;top:80px;}
-.sum-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.84rem;}
-.sum-row .lbl{color:var(--muted);}
-.sum-row .val{font-weight:500;color:var(--text);}
-.total-row{display:flex;justify-content:space-between;padding:14px 0 0;margin-top:4px;}
-.total-row .lbl{font-size:0.9rem;font-weight:600;color:var(--text);}
-.total-row .val{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--primary);}
-.btn-book{width:100%;background:var(--primary);border:none;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.95rem;padding:14px;border-radius:10px;cursor:pointer;transition:all 0.2s;margin-top:14px;}
-.btn-book:hover{background:#155c32;transform:translateY(-1px);}
-.info-tip{background:var(--primary-light);border:1px solid rgba(26,107,60,0.15);border-radius:10px;padding:12px 14px;font-size:0.78rem;color:var(--primary);line-height:1.6;}
-
-@media(max-width:900px){.grid{grid-template-columns:1fr;}.summary-card{position:static;}.form-row2{grid-template-columns:1fr;}}
-@media(max-width:560px){.main{padding:20px 16px 50px;}.slots-grid{grid-template-columns:repeat(auto-fill,minmax(75px,1fr));}}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--primary-light);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--primary);}
+.btn-book-nav{background:var(--primary);border:none;color:#fff;padding:8px 18px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;font-size:0.82rem;cursor:pointer;text-decoration:none;}
+.layout{display:flex;flex:1;}
+.sidebar{width:220px;flex-shrink:0;padding:20px 14px;border-right:1px solid var(--border);background:var(--white);display:flex;flex-direction:column;gap:4px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;}
+.sidebar-label{font-size:0.66rem;font-weight:600;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;padding:8px 12px 4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:0.86rem;color:var(--muted);cursor:pointer;transition:all 0.2s;text-decoration:none;border:1px solid transparent;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:var(--primary-light);color:var(--primary);border-color:rgba(26,107,60,0.15);font-weight:500;}
+.nav-item .icon{font-size:1rem;width:20px;text-align:center;}
+.main-content{flex:1;padding:28px 32px;overflow-x:hidden;}
+.page-section{display:none;animation:fadeIn 0.3s ease;}
+.page-section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.welcome{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:22px 26px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.welcome h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.welcome p{font-size:0.84rem;color:var(--muted);}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:22px;}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;transition:transform 0.2s;}
+.stat-card:hover{transform:translateY(-2px);}
+.stat-icon{font-size:1.2rem;margin-bottom:10px;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--primary);}
+.stat-label{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+.section-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:18px;}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.section-head h3{font-size:0.95rem;font-weight:600;color:var(--text);}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.78rem;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);}
+.booking-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.booking-item:last-child{border-bottom:none;}
+.booking-left{display:flex;align-items:center;gap:12px;}
+.booking-icon{width:42px;height:42px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.booking-info h4{font-size:0.88rem;font-weight:500;color:var(--text);margin-bottom:2px;}
+.booking-info p{font-size:0.75rem;color:var(--muted);}
+.booking-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.booking-amount{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--text);}
+.badge{font-size:0.68rem;font-weight:600;padding:3px 10px;border-radius:50px;}
+.badge-confirmed{background:#dcfce7;color:#15803d;}
+.badge-pending{background:#fff7ed;color:#c2410c;}
+.badge-cancelled{background:#fee2e2;color:#b91c1c;}
+.badge-completed{background:var(--bg);color:var(--muted);}
+.btn-cancel{background:transparent;border:1px solid #fca5a5;color:#ef4444;padding:4px 11px;border-radius:7px;font-size:0.72rem;cursor:pointer;transition:all 0.2s;}
+.btn-cancel:hover{background:#fee2e2;}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.filter-tab{padding:5px 13px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.78rem;cursor:pointer;transition:all 0.2s;}
+.filter-tab.active{background:var(--primary-light);border-color:var(--primary);color:var(--primary);font-weight:500;}
+.empty-state{text-align:center;padding:30px;color:var(--muted);font-size:0.84rem;}
+.empty-state div{font-size:2rem;margin-bottom:8px;}
+.profile-hero{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:18px;}
+.profile-cover{height:90px;background:linear-gradient(135deg,var(--primary),#2d9d5e);}
+.profile-body{padding:0 24px 24px;}
+.profile-avatar-wrap{width:70px;height:70px;border-radius:50%;background:var(--primary-light);border:3px solid var(--white);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--primary);margin-top:-35px;margin-bottom:12px;}
+.profile-body h2{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.profile-body p{font-size:0.82rem;color:var(--muted);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:16px;}
+.info-field label{font-size:0.76rem;font-weight:500;color:var(--text);display:block;margin-bottom:6px;}
+.info-field input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.86rem;color:var(--text);outline:none;transition:all 0.2s;}
+.info-field input:focus{border-color:var(--primary);}
+.btn-save{background:var(--primary);border:none;color:#fff;padding:11px 26px;border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.88rem;cursor:pointer;margin-top:14px;}
+.mob-nav-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);padding:8px 0;z-index:100;}
+.mob-nav{display:flex;justify-content:space-around;}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:0.62rem;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:8px;}
+.mob-item .icon{font-size:1.1rem;}
+.mob-item.active{color:var(--primary);}
+@media(max-width:768px){.sidebar{display:none;}.main-content{padding:18px 16px 80px;}.mob-nav-bar{display:block;}}
 </style>
 </head>
 <body>
@@ -84,121 +85,258 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
   <div class="nav-inner">
     <a class="logo" href="index.html"><span class="logo-dot"></span>EV ChargePro</a>
     <div class="nav-right">
-      <a href="dashboard.html" class="nav-link">Dashboard</a>
-      <a href="login.html" class="btn-sm">Logout</a>
+      <a href="booking.html" class="btn-book-nav">+ Book Slot</a>
+      <div class="avatar" id="user-initials">?</div>
     </div>
   </div>
 </nav>
 
-<div class="main">
-  <div class="page-title">Book a Charging Slot</div>
-  <p class="page-sub">Select your station, date and time to reserve your spot</p>
+<div class="layout">
+  <aside class="sidebar">
+    <span class="sidebar-label">Menu</span>
+    <a class="nav-item active" onclick="showSec('overview',this)"><span class="icon">🏠</span>Overview</a>
+    <a class="nav-item" onclick="showSec('bookings',this)"><span class="icon">📅</span>My Bookings</a>
+    <a class="nav-item" onclick="showSec('payments',this)"><span class="icon">💳</span>Payments</a>
+    <span class="sidebar-label">Account</span>
+    <a class="nav-item" onclick="showSec('profile',this)"><span class="icon">👤</span>Profile</a>
+    <a class="nav-item" href="login.html" onclick="logout()"><span class="icon">🚪</span>Logout</a>
+  </aside>
 
-  <div class="progress">
-    <div class="prog-step"><div class="prog-circle done">✓</div><span class="prog-label">Login</span></div>
-    <div class="prog-line done"></div>
-    <div class="prog-step"><div class="prog-circle active">2</div><span class="prog-label active">Select Slot</span></div>
-    <div class="prog-line"></div>
-    <div class="prog-step"><div class="prog-circle">3</div><span class="prog-label">Payment</span></div>
-    <div class="prog-line"></div>
-    <div class="prog-step"><div class="prog-circle">4</div><span class="prog-label">Confirmed</span></div>
-  </div>
-
-  <div class="grid">
-    <div>
-      <div class="card">
-        <div class="card-title">📋 Booking Details</div>
-        <div class="form-row2">
-          <div class="form-group"><label>Booking Date</label><input type="date" id="bdate" onchange="updateSummary()"/></div>
-          <div class="form-group"><label>Vehicle Number</label><input type="text" id="vnum" placeholder="MH12AB1234" oninput="updateSummary()"/></div>
-        </div>
+  <main class="main-content">
+    <!-- OVERVIEW -->
+    <div class="page-section active" id="sec-overview">
+      <div class="welcome">
+        <div><h2 id="welcome-msg">Good morning! 👋</h2><p id="welcome-sub">Welcome to your dashboard</p></div>
+        <a href="booking.html" class="btn-book-nav">+ New Booking</a>
       </div>
-
-      <div class="card">
-        <div class="card-title">📍 Choose Station</div>
-        <div class="station-list">
-          <div class="station-card selected" onclick="selectStation(this,'Kothrud EV Station')">
-            <img class="station-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80" alt="Station"/>
-            <div class="station-info"><h4>Kothrud EV Station</h4><p>Near D-Mart, Kothrud, Pune</p></div>
-            <div class="station-meta"><div class="avail-badge">8 free</div><div class="dist">1.2 km</div></div>
-          </div>
-          <div class="station-card" onclick="selectStation(this,'Hinjewadi Tech Park')">
-            <img class="station-img" src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=200&q=80" alt="Station"/>
-            <div class="station-info"><h4>Hinjewadi Tech Park</h4><p>Phase 1, Hinjewadi, Pune</p></div>
-            <div class="station-meta"><div class="avail-badge">5 free</div><div class="dist">4.8 km</div></div>
-          </div>
-          <div class="station-card" onclick="selectStation(this,'Wakad Station')">
-            <img class="station-img" src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=200&q=80" alt="Station"/>
-            <div class="station-info"><h4>Wakad Station</h4><p>Wakad Bridge, Pune</p></div>
-            <div class="station-meta"><div class="avail-badge">12 free</div><div class="dist">3.1 km</div></div>
-          </div>
-        </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">📅</div><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total Bookings</div></div>
+        <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-num" id="stat-confirmed">0</div><div class="stat-label">Confirmed</div></div>
+        <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-num" id="stat-completed">0</div><div class="stat-label">Completed</div></div>
+        <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-num" id="stat-spent">₹0</div><div class="stat-label">Total Spent</div></div>
       </div>
-
-      <div class="card">
-        <div class="card-title">⏰ Select Time Slot</div>
-        <div class="legend">
-          <span class="leg"><span class="leg-dot" style="background:var(--border);border:1px solid var(--border)"></span>Available</span>
-          <span class="leg"><span class="leg-dot" style="background:var(--primary)"></span>Selected</span>
-          <span class="leg"><span class="leg-dot" style="background:#fee2e2"></span>Booked</span>
-        </div>
-        <div class="slots-grid" id="slots-grid"></div>
+      <div class="section-card">
+        <div class="section-head"><h3>Recent Bookings</h3><a class="btn-outline" onclick="showSec('bookings',null)">View All</a></div>
+        <div id="recent-bookings"><div class="empty-state"><div>📅</div>Loading bookings...</div></div>
       </div>
     </div>
 
-    <div>
-      <div class="card summary-card">
-        <div class="card-title">🧾 Booking Summary</div>
-        <div class="sum-row"><span class="lbl">Station</span><span class="val" id="sum-station">Kothrud EV</span></div>
-        <div class="sum-row"><span class="lbl">Date</span><span class="val" id="sum-date">—</span></div>
-        <div class="sum-row"><span class="lbl">Time</span><span class="val" id="sum-time">—</span></div>
-        <div class="sum-row"><span class="lbl">Vehicle</span><span class="val" id="sum-vehicle">—</span></div>
-        <div class="sum-row"><span class="lbl">Duration</span><span class="val">1 Hour</span></div>
-        <div class="sum-row"><span class="lbl">Rate</span><span class="val">₹2/min</span></div>
-        <div class="total-row"><span class="lbl">Total</span><span class="val">₹150</span></div>
-        <button class="btn-book" onclick="proceedToPayment()">Proceed to Pay →</button>
-        <p style="font-size:0.72rem;color:var(--muted);text-align:center;margin-top:10px;">Free cancellation up to 1 hr before</p>
+    <!-- BOOKINGS -->
+    <div class="page-section" id="sec-bookings">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:18px;">My Bookings</h2>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterBookings('all',this)">All</button>
+        <button class="filter-tab" onclick="filterBookings('confirmed',this)">Confirmed</button>
+        <button class="filter-tab" onclick="filterBookings('completed',this)">Completed</button>
+        <button class="filter-tab" onclick="filterBookings('cancelled',this)">Cancelled</button>
       </div>
-      <div class="card"><div class="info-tip">⚡ <strong>Tip:</strong> Book at least 30 mins in advance. Peak hours: 8–10 AM and 6–9 PM.</div></div>
+      <div class="section-card">
+        <div id="all-bookings"><div class="empty-state"><div>📅</div>Loading bookings...</div></div>
+      </div>
     </div>
+
+    <!-- PAYMENTS -->
+    <div class="page-section" id="sec-payments">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:18px;">Payment History</h2>
+      <div class="section-card">
+        <div id="all-payments"><div class="empty-state"><div>💳</div>Loading payments...</div></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page-section" id="sec-profile">
+      <div class="profile-hero">
+        <div class="profile-cover"></div>
+        <div class="profile-body">
+          <div class="profile-avatar-wrap" id="profile-initials">?</div>
+          <h2 id="profile-name">Loading...</h2>
+          <p id="profile-email">—</p>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="section-head"><h3>Personal Information</h3></div>
+        <div class="info-grid">
+          <div class="info-field"><label>Full Name</label><input type="text" id="p-name"/></div>
+          <div class="info-field"><label>Email</label><input type="email" id="p-email"/></div>
+          <div class="info-field"><label>Phone</label><input type="tel" id="p-phone"/></div>
+          <div class="info-field"><label>Vehicle Number</label><input type="text" id="p-vehicle"/></div>
+        </div>
+        <button class="btn-save" onclick="saveProfile()">Save Changes</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="mob-nav-bar">
+  <div class="mob-nav">
+    <div class="mob-item active" onclick="showSec('overview',this)"><span class="icon">🏠</span>Home</div>
+    <div class="mob-item" onclick="showSec('bookings',this)"><span class="icon">📅</span>Bookings</div>
+    <div class="mob-item" onclick="showSec('payments',this)"><span class="icon">💳</span>Payments</div>
+    <div class="mob-item" onclick="showSec('profile',this)"><span class="icon">👤</span>Profile</div>
   </div>
 </div>
 
 <script>
-const slots=[
-  {time:'06:00 AM',status:'available'},{time:'07:00 AM',status:'booked'},
-  {time:'08:00 AM',status:'booked'},{time:'09:00 AM',status:'available'},
-  {time:'10:00 AM',status:'available'},{time:'11:00 AM',status:'booked'},
-  {time:'12:00 PM',status:'available'},{time:'01:00 PM',status:'available'},
-  {time:'02:00 PM',status:'booked'},{time:'03:00 PM',status:'available'},
-  {time:'04:00 PM',status:'available'},{time:'05:00 PM',status:'booked'},
-  {time:'06:00 PM',status:'available'},{time:'07:00 PM',status:'available'},
-  {time:'08:00 PM',status:'booked'},{time:'09:00 PM',status:'available'},
-];
-let selTime=null,selStation='Kothrud EV Station';
-function renderSlots(){
-  document.getElementById('slots-grid').innerHTML=slots.map(s=>`
-    <button class="slot-btn ${s.status} ${selTime===s.time?'selected':''}"
-      onclick="${s.status==='booked'?'':` selectSlot('${s.time}')`}"
-      ${s.status==='booked'?'disabled':''}>
-      ${s.time}
-    </button>`).join('');
+const API = 'http://localhost:8080';
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+let allBookings = [];
+
+if (!user.userId) { window.location.href = 'login.html'; }
+
+// Set user info
+const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase() : '?';
+document.getElementById('user-initials').textContent = initials;
+document.getElementById('profile-initials').textContent = initials;
+document.getElementById('profile-name').textContent = user.name || '—';
+document.getElementById('profile-email').textContent = user.email || '—';
+document.getElementById('p-name').value = user.name || '';
+document.getElementById('p-email').value = user.email || '';
+document.getElementById('p-phone').value = user.phone || '';
+document.getElementById('p-vehicle').value = user.vehicleNo || '';
+
+const hour = new Date().getHours();
+const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+document.getElementById('welcome-msg').textContent = `${greeting}, ${user.name?.split(' ')[0] || 'User'} 👋`;
+
+// Load bookings
+async function loadBookings() {
+  try {
+    const res = await fetch(`${API}/api/bookings/user/${user.userId}`);
+    allBookings = await res.json();
+
+    // Stats
+    const confirmed = allBookings.filter(b => b.status === 'confirmed').length;
+    const completed = allBookings.filter(b => b.status === 'completed').length;
+    document.getElementById('stat-total').textContent = allBookings.length;
+    document.getElementById('stat-confirmed').textContent = confirmed;
+    document.getElementById('stat-completed').textContent = completed;
+    document.getElementById('stat-spent').textContent = `₹${allBookings.length * 150}`;
+    document.getElementById('welcome-sub').textContent = `You have ${confirmed} confirmed booking${confirmed !== 1 ? 's' : ''}`;
+
+    renderBookings(allBookings, 'recent-bookings', 3);
+    renderBookings(allBookings, 'all-bookings');
+  } catch (e) {
+    document.getElementById('recent-bookings').innerHTML = '<div class="empty-state"><div>❌</div>Could not load bookings</div>';
+    document.getElementById('all-bookings').innerHTML = '<div class="empty-state"><div>❌</div>Could not load bookings</div>';
+  }
 }
-function selectSlot(time){selTime=time;document.getElementById('sum-time').textContent=time;renderSlots();}
-function selectStation(el,name){document.querySelectorAll('.station-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');selStation=name;document.getElementById('sum-station').textContent=name;}
-function updateSummary(){
-  const d=document.getElementById('bdate').value,v=document.getElementById('vnum').value;
-  if(d)document.getElementById('sum-date').textContent=new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-  if(v)document.getElementById('sum-vehicle').textContent=v.toUpperCase();
+
+// Render bookings
+function renderBookings(bookings, containerId, limit = null) {
+  const container = document.getElementById(containerId);
+  const list = limit ? bookings.slice(0, limit) : bookings;
+
+  if (list.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div>📅</div>No bookings found. <a href="booking.html" style="color:var(--primary)">Book your first slot!</a></div>';
+    return;
+  }
+
+  container.innerHTML = list.map(b => `
+    <div class="booking-item">
+      <div class="booking-left">
+        <div class="booking-icon">⚡</div>
+        <div class="booking-info">
+          <h4>${b.station?.stationName || 'Station'}</h4>
+          <p>${b.bookingDate || '—'} • ${b.bookingTime || '—'} • ${b.slot?.slotId ? 'Slot #' + b.slot.slotId : ''}</p>
+        </div>
+      </div>
+      <div class="booking-right">
+        <span class="badge badge-${b.status}">${b.status}</span>
+        <span class="booking-amount">₹150</span>
+        ${b.status === 'confirmed' ? `<button class="btn-cancel" onclick="cancelBooking(${b.bookingId}, this)">Cancel</button>` : ''}
+      </div>
+    </div>
+  `).join('');
 }
-function proceedToPayment(){
-  if(!document.getElementById('bdate').value||!document.getElementById('vnum').value||!selTime){alert('Please fill all details and select a time slot!');return;}
-  window.location.href='payment.html';
+
+// Filter bookings
+function filterBookings(status, el) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const filtered = status === 'all' ? allBookings : allBookings.filter(b => b.status === status);
+  renderBookings(filtered, 'all-bookings');
 }
-const today=new Date().toISOString().split('T')[0];
-document.getElementById('bdate').value=today;
-document.getElementById('bdate').min=today;
-updateSummary();renderSlots();
+
+// Cancel booking
+async function cancelBooking(id, btn) {
+  if (!confirm('Are you sure you want to cancel this booking?')) return;
+  btn.textContent = '...';
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${API}/api/bookings/cancel/${id}`, { method: 'PUT' });
+    if (res.ok) { loadBookings(); }
+    else { alert('Could not cancel booking.'); btn.textContent = 'Cancel'; btn.disabled = false; }
+  } catch (e) { alert('Server error!'); btn.textContent = 'Cancel'; btn.disabled = false; }
+}
+
+// Load payments
+async function loadPayments() {
+  try {
+    const res = await fetch(`${API}/api/payments/all`);
+    const payments = await res.json();
+    const container = document.getElementById('all-payments');
+
+    if (payments.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div>💳</div>No payment history</div>';
+      return;
+    }
+
+    container.innerHTML = payments.map(p => `
+      <div class="booking-item">
+        <div class="booking-left">
+          <div class="booking-icon">💳</div>
+          <div class="booking-info">
+            <h4>Booking #EV${String(p.booking?.bookingId || 0).padStart(4,'0')}</h4>
+            <p>${p.paymentDate || '—'}</p>
+          </div>
+        </div>
+        <div class="booking-right">
+          <span class="badge badge-${p.paymentStatus === 'paid' ? 'confirmed' : 'pending'}">${p.paymentStatus}</span>
+          <span class="booking-amount">₹${p.amount}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    document.getElementById('all-payments').innerHTML = '<div class="empty-state"><div>❌</div>Could not load payments</div>';
+  }
+}
+
+// Save profile
+async function saveProfile() {
+  const updated = {
+    userId: user.userId,
+    name: document.getElementById('p-name').value,
+    email: document.getElementById('p-email').value,
+    phone: document.getElementById('p-phone').value,
+    vehicleNo: document.getElementById('p-vehicle').value,
+    password: user.password
+  };
+  try {
+    const res = await fetch(`${API}/api/users/update`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated)
+    });
+    if (res.ok) {
+      const newUser = await res.json();
+      localStorage.setItem('user', JSON.stringify(newUser));
+      alert('Profile updated successfully! ✅');
+    } else { alert('Update failed!'); }
+  } catch (e) { alert('Server error!'); }
+}
+
+function showSec(name, el) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item, .mob-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (name === 'payments') loadPayments();
+}
+
+function logout() { localStorage.clear(); }
+
+// Init
+loadBookings();
 </script>
 </body>
 </html>

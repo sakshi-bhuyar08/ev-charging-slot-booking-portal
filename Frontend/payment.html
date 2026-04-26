@@ -14,7 +14,6 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:8px;}
 .logo-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;}
 .secure{font-size:0.8rem;color:var(--muted);display:flex;align-items:center;gap:5px;}
-
 .main{max-width:1100px;margin:0 auto;padding:32px 5% 60px;}
 .progress{display:flex;align-items:center;margin-bottom:32px;overflow-x:auto;padding-bottom:4px;}
 .prog-step{display:flex;align-items:center;gap:8px;flex-shrink:0;}
@@ -25,11 +24,9 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .prog-label.active{color:var(--primary);font-weight:600;}
 .prog-line{flex:1;min-width:30px;height:2px;background:var(--border);margin:0 8px;}
 .prog-line.done{background:var(--primary);}
-
 .pay-grid{display:grid;grid-template-columns:1fr 310px;gap:24px;}
 .card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:22px;}
 .card-title{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:18px;}
-
 .method-tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
 .method-tab{flex:1;min-width:80px;padding:13px 8px;border-radius:12px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all 0.2s;text-align:center;}
 .method-tab:hover{border-color:var(--primary);}
@@ -37,19 +34,15 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .m-icon{font-size:1.3rem;margin-bottom:5px;}
 .m-label{font-size:0.72rem;color:var(--muted);font-weight:500;}
 .method-tab.active .m-label{color:var(--primary);}
-
 .pay-form{display:none;animation:fadeIn 0.3s ease;}
 .pay-form.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-
 .form-group{margin-bottom:14px;}
 .form-group label{display:block;font-size:0.78rem;font-weight:500;color:var(--text);margin-bottom:6px;}
 .form-group input,.form-group select{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:11px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:all 0.2s;}
 .form-group input:focus,.form-group select:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px var(--primary-light);}
 .form-group input::placeholder{color:#c1c8d0;}
 .card-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-
-/* Order Summary */
 .order-card{position:sticky;top:80px;}
 .booking-img{width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:16px;}
 .detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.83rem;}
@@ -61,18 +54,18 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .price-total .val{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--primary);}
 .btn-pay{width:100%;background:var(--primary);border:none;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.95rem;padding:14px;border-radius:10px;cursor:pointer;transition:all 0.2s;margin-top:14px;}
 .btn-pay:hover{background:#155c32;transform:translateY(-1px);}
+.btn-pay:disabled{background:#9ca3af;cursor:not-allowed;transform:none;}
 .secure-badge{display:flex;align-items:center;justify-content:center;gap:5px;font-size:0.72rem;color:var(--muted);margin-top:10px;}
-
-/* Success */
 .success-overlay{display:none;position:fixed;inset:0;background:rgba(249,250,251,0.97);z-index:200;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;}
 .success-overlay.show{display:flex;animation:fadeIn 0.4s ease;}
 .success-ring{width:100px;height:100px;border-radius:50%;border:3px solid var(--primary);background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin-bottom:24px;animation:pop 0.4s 0.2s ease both;}
 @keyframes pop{from{transform:scale(0.4);opacity:0;}to{transform:scale(1);opacity:1;}}
 .success-overlay h2{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--text);margin-bottom:8px;}
 .success-overlay p{color:var(--muted);font-size:0.92rem;max-width:360px;margin-bottom:6px;}
-.booking-id{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--primary);margin:14px 0 22px;}
+.booking-id-text{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--primary);margin:14px 0 22px;}
 .btn-dash{background:var(--primary);border:none;color:#fff;padding:13px 36px;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:0.95rem;cursor:pointer;text-decoration:none;display:inline-block;}
-
+.loading{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
 @media(max-width:750px){.pay-grid{grid-template-columns:1fr;}.order-card{position:static;}.card-row{grid-template-columns:1fr;}.main{padding:20px 16px 50px;}}
 </style>
 </head>
@@ -105,9 +98,8 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
           <div class="method-tab" onclick="switchMethod('net',this)"><div class="m-icon">🏦</div><div class="m-label">Net Banking</div></div>
           <div class="method-tab" onclick="switchMethod('wallet',this)"><div class="m-icon">👛</div><div class="m-label">Wallet</div></div>
         </div>
-
         <div class="pay-form active" id="form-upi">
-          <div class="form-group"><label>UPI ID</label><input type="text" placeholder="yourname@upi"/></div>
+          <div class="form-group"><label>UPI ID</label><input type="text" id="upi-id" placeholder="yourname@upi"/></div>
           <p style="font-size:0.78rem;color:var(--muted);">Supported: GPay, PhonePe, Paytm, BHIM</p>
         </div>
         <div class="pay-form" id="form-card">
@@ -136,36 +128,97 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
       <div class="card order-card">
         <div class="card-title">Order Summary</div>
         <img class="booking-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Station"/>
-        <div class="detail-row"><span class="lbl">Station</span><span class="val">Kothrud EV Station</span></div>
-        <div class="detail-row"><span class="lbl">Date</span><span class="val">20 Apr 2026</span></div>
-        <div class="detail-row"><span class="lbl">Time</span><span class="val">11:00 AM</span></div>
-        <div class="detail-row"><span class="lbl">Vehicle</span><span class="val">MH12AB1234</span></div>
+        <div class="detail-row"><span class="lbl">Station</span><span class="val" id="sum-station">—</span></div>
+        <div class="detail-row"><span class="lbl">Date</span><span class="val" id="sum-date">—</span></div>
+        <div class="detail-row"><span class="lbl">Time</span><span class="val" id="sum-time">—</span></div>
+        <div class="detail-row"><span class="lbl">Vehicle</span><span class="val" id="sum-vehicle">—</span></div>
         <div style="margin-top:12px;">
           <div class="price-row"><span>Charging fee (60 min × ₹2)</span><span>₹120</span></div>
           <div class="price-row"><span>Booking fee</span><span>₹20</span></div>
           <div class="price-row"><span>GST (8.3%)</span><span>₹10</span></div>
         </div>
         <div class="price-total"><span class="lbl">Total Payable</span><span class="val">₹150</span></div>
-        <button class="btn-pay" onclick="doPay()">Pay ₹150 →</button>
+        <button class="btn-pay" id="pay-btn" onclick="doPay()">Pay ₹150 →</button>
         <div class="secure-badge">🔒 256-bit SSL Encrypted</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Success -->
 <div class="success-overlay" id="success">
   <div class="success-ring">✓</div>
   <h2>Payment Successful!</h2>
   <p>Your EV charging slot has been booked successfully.</p>
-  <div class="booking-id">Booking ID: #EV2026042001</div>
-  <p style="font-size:0.8rem;margin-bottom:22px;color:var(--muted);">20 Apr 2026 • 11:00 AM • Kothrud Station</p>
+  <div class="booking-id-text" id="booking-id-display">Booking ID: #EV0000</div>
+  <p style="font-size:0.8rem;margin-bottom:22px;color:var(--muted);" id="booking-detail-display"></p>
   <a href="dashboard.html" class="btn-dash">View My Bookings →</a>
 </div>
 
 <script>
-function switchMethod(t,el){document.querySelectorAll('.method-tab').forEach(m=>m.classList.remove('active'));document.querySelectorAll('.pay-form').forEach(f=>f.classList.remove('active'));el.classList.add('active');document.getElementById('form-'+t).classList.add('active');}
-function fmtCard(i){let v=i.value.replace(/\s/g,'').replace(/\D/g,'');i.value=v.match(/.{1,4}/g)?.join('  ')||v;}
-function doPay(){document.getElementById('success').classList.add('show');}
+const API = 'http://localhost:8080';
+
+// Load booking data from localStorage
+const booking = JSON.parse(localStorage.getItem('currentBooking') || '{}');
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+if (!booking.bookingId) { alert('No booking found! Please book first.'); window.location.href = 'booking.html'; }
+
+// Fill summary
+document.getElementById('sum-station').textContent = booking.stationName || '—';
+document.getElementById('sum-date').textContent = booking.date ? new Date(booking.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+document.getElementById('sum-time').textContent = booking.time || '—';
+document.getElementById('sum-vehicle').textContent = booking.vehicle || '—';
+
+function switchMethod(t, el) {
+  document.querySelectorAll('.method-tab').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.pay-form').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('form-' + t).classList.add('active');
+}
+
+function fmtCard(i) { let v = i.value.replace(/\s/g, '').replace(/\D/g, ''); i.value = v.match(/.{1,4}/g)?.join('  ') || v; }
+
+async function doPay() {
+  console.log("Booking ID:", booking.bookingId);
+  const btn = document.getElementById('pay-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span>Processing...';
+
+  try {
+    const paymentData = {
+      booking: { bookingId: booking.bookingId },
+      amount: booking.amount || 150,
+      paymentStatus: 'paid',
+      paymentDate: new Date().toISOString().split('T')[0]
+    };
+
+    const res = await fetch(`${API}/api/payments/pay`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(paymentData)
+    });
+
+    if (res.ok) {
+      const payment = await res.json();
+      console.log("Payment successful:", payment);
+      // Show success
+      document.getElementById('booking-id-display').textContent = `Booking ID: #EV${String(booking.bookingId).padStart(6, '0')}`;
+      document.getElementById('booking-detail-display').textContent = `${booking.date} • ${booking.time} • ${booking.stationName}`;
+      document.getElementById('success').classList.add('show');
+      // Clear booking from storage
+      localStorage.removeItem('currentBooking');
+    } else {
+      alert('Payment failed! Please try again.');
+      btn.disabled = false;
+      btn.innerHTML = 'Pay ₹150 →';
+    }
+  } catch (e) {
+    alert('❌ Server not connected!');
+    btn.disabled = false;
+    btn.innerHTML = 'Pay ₹150 →';
+  }
+}
 </script>
 </body>
 </html>
