@@ -94,6 +94,9 @@ tr:hover td{background:var(--bg);}
     <a class="nav-item" onclick="showSec('stations',this)"><span class="icon">📍</span>Stations</a>
     <a class="nav-item" onclick="showSec('slots',this)"><span class="icon">⏰</span>Slots</a>
     <a class="nav-item" onclick="showSec('users',this)"><span class="icon">👥</span>Users</a>
+    <a class="nav-item" href="report.html">
+  <span class="icon">📊</span>Reports
+</a>
   </aside>
 
   <main class="main-content">
@@ -217,7 +220,10 @@ tr:hover td{background:var(--bg);}
     <div class="mob-item" onclick="showSec('bookings',this)"><span class="icon">📅</span>Bookings</div>
     <div class="mob-item" onclick="showSec('stations',this)"><span class="icon">📍</span>Stations</div>
     <div class="mob-item" onclick="showSec('users',this)"><span class="icon">👥</span>Users</div>
-  </div>
+<div class="mob-item" onclick="window.location.href='report.html'">
+  <span class="icon">📊</span>Reports
+</div>
+</div>
 </div>
 
 <script>
@@ -423,11 +429,66 @@ async function deleteUser(id) {
   } catch (e) { alert('Server error!'); }
 }
 
+
 function showSec(name, el) {
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-' + name).classList.add('active');
   document.querySelectorAll('.nav-item, .mob-item').forEach(i => i.classList.remove('active'));
   if (el) el.classList.add('active');
+}
+
+async function doLogin(type) {
+  let ok = true;
+  if (type === 'user') {
+    // user login same rahega
+    const email = document.getElementById('u-email').value;
+    const pwd = document.getElementById('u-pwd').value;
+    document.getElementById('err-uemail').style.display =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'none' : (ok=false,'block');
+    document.getElementById('err-upwd').style.display =
+      pwd ? 'none' : (ok=false,'block');
+    if (!ok) return;
+    try {
+      const res = await fetch('http://localhost:8080/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pwd })
+      });
+      if (res.ok) {
+        const user = await res.json();
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('userId', user.userId);
+        window.location.href = 'dashboard.html';
+      } else {
+        alert('Invalid email or password!');
+      }
+    } catch(e) { alert('Server not connected!'); }
+
+  } else {
+    // Admin login backend 
+    const email = document.getElementById('a-email').value;
+    const pwd = document.getElementById('a-pwd').value;
+    document.getElementById('err-aemail').style.display =
+      email ? 'none' : (ok=false,'block');
+    document.getElementById('err-apwd').style.display =
+      pwd ? 'none' : (ok=false,'block');
+    if (!ok) return;
+
+    try {
+      const res = await fetch('http://localhost:8080/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pwd })
+      });
+      if (res.ok) {
+        const admin = await res.json();
+        localStorage.setItem('admin', JSON.stringify(admin));
+        window.location.href = 'admin.html';
+      } else {
+        alert('Invalid admin credentials!');
+      }
+    } catch(e) { alert('Server not connected!'); }
+  }
 }
 
 loadOverview();

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reports — EV ChargePro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--primary:#1a6b3c;--pl:#e8f5ee;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--white:#fff;--bg:#f9fafb;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);}
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 5%;}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--primary);text-decoration:none;}
+.btn-sm{background:var(--primary);color:#fff;border:none;padding:8px 18px;border-radius:50px;font-size:0.82rem;cursor:pointer;text-decoration:none;}
+.main{max-width:1200px;margin:0 auto;padding:32px 5% 60px;}
+.page-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text);margin-bottom:4px;}
+.page-sub{font-size:0.86rem;color:var(--muted);margin-bottom:28px;}
+
+/* Summary Cards */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px;}
+.sum-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;}
+.sum-icon{font-size:1.5rem;margin-bottom:8px;}
+.sum-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--primary);}
+.sum-label{font-size:0.76rem;color:var(--muted);margin-top:3px;}
+
+/* Tabs */
+.report-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.rtab{padding:9px 20px;border-radius:50px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.84rem;cursor:pointer;transition:all 0.2s;}
+.rtab.active{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:500;}
+
+/* Report section */
+.report-section{display:none;}
+.report-section.active{display:block;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:20px;}
+.card-title{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:18px;}
+
+/* Table */
+.report-table{width:100%;border-collapse:collapse;font-size:0.84rem;}
+.report-table th{padding:10px 14px;text-align:left;background:var(--pl);color:var(--primary);font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;}
+.report-table td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);}
+.report-table tr:last-child td{border-bottom:none;}
+.report-table tr:hover td{background:var(--bg);}
+.td-m{color:var(--muted);}
+.badge-green{background:#dcfce7;color:#15803d;font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:50px;}
+.badge-orange{background:#fff7ed;color:#c2410c;font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:50px;}
+
+/* Bar chart */
+.bar-chart{display:flex;flex-direction:column;gap:10px;}
+.bar-row{display:flex;align-items:center;gap:12px;}
+.bar-label{font-size:0.8rem;color:var(--text);min-width:150px;flex-shrink:0;}
+.bar-track{flex:1;background:var(--bg);border-radius:50px;height:22px;overflow:hidden;}
+.bar-fill{height:100%;background:var(--primary);border-radius:50px;display:flex;align-items:center;padding-left:10px;font-size:0.72rem;color:#fff;font-weight:600;transition:width 0.8s ease;}
+.bar-val{font-size:0.8rem;color:var(--muted);min-width:60px;text-align:right;}
+
+/* User search */
+.search-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.search-input{flex:1;min-width:180px;background:var(--white);border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;color:var(--text);outline:none;}
+.search-input:focus{border-color:var(--primary);}
+.btn-search{background:var(--primary);border:none;color:#fff;padding:10px 22px;border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;cursor:pointer;}
+
+.loading{text-align:center;padding:24px;color:var(--muted);font-size:0.84rem;}
+@media(max-width:600px){.bar-label{min-width:100px;font-size:0.72rem;}.main{padding:20px 16px 50px;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html">⚡ EV ChargePro</a>
+    <div style="display:flex;gap:10px;">
+      <a href="admin.html" class="btn-sm">← Admin</a>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="page-title">📊 Reports & Analytics</div>
+  <p class="page-sub">Station wise, payment wise, user wise aur slot wise reports</p>
+
+  <!-- Summary Cards -->
+  <div class="summary-grid">
+    <div class="sum-card"><div class="sum-icon">👥</div><div class="sum-num" id="s-users">0</div><div class="sum-label">Total Users</div></div>
+    <div class="sum-card"><div class="sum-icon">📍</div><div class="sum-num" id="s-stations">0</div><div class="sum-label">Stations</div></div>
+    <div class="sum-card"><div class="sum-icon">📅</div><div class="sum-num" id="s-bookings">0</div><div class="sum-label">Total Bookings</div></div>
+    <div class="sum-card"><div class="sum-icon">💰</div><div class="sum-num" id="s-revenue">₹0</div><div class="sum-label">Total Revenue</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="report-tabs">
+    <button class="rtab active" onclick="showReport('station',this)">📍 Station Wise</button>
+    <button class="rtab" onclick="showReport('payment',this)">💰 Payment Wise</button>
+    <button class="rtab" onclick="showReport('user',this)">👥 User Wise</button>
+    <button class="rtab" onclick="showReport('slot',this)">⏰ Slot Wise</button>
+    <button class="rtab" onclick="showReport('myreport',this)">🔍 User Detail</button>
+  </div>
+
+  <!-- STATION WISE -->
+  <div class="report-section active" id="rep-station">
+    <div class="card">
+      <div class="card-title">📍 Station Wise Bookings</div>
+      <div class="bar-chart" id="station-bars"><div class="loading">Loading...</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📍 Station Wise Revenue</div>
+      <div class="bar-chart" id="revenue-bars"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- PAYMENT WISE -->
+  <div class="report-section" id="rep-payment">
+    <div class="card">
+      <div class="card-title">💳 All Payments Record</div>
+      <div style="overflow-x:auto;">
+        <table class="report-table">
+          <thead><tr><th>#</th><th>Booking ID</th><th>Station</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="payment-tbody"><tr><td colspan="6" class="loading">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER WISE -->
+  <div class="report-section" id="rep-user">
+    <div class="card">
+      <div class="card-title">👥 User Wise Booking Count</div>
+      <div style="overflow-x:auto;">
+        <table class="report-table">
+          <thead><tr><th>User Name</th><th>Email</th><th>Total Bookings</th></tr></thead>
+          <tbody id="user-tbody"><tr><td colspan="3" class="loading">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLOT WISE -->
+  <div class="report-section" id="rep-slot">
+    <div class="card">
+      <div class="card-title">⏰ Most Popular Time Slots</div>
+      <div class="bar-chart" id="slot-bars"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- USER DETAIL REPORT -->
+  <div class="report-section" id="rep-myreport">
+    <div class="card">
+      <div class="card-title">🔍 Individual User Report</div>
+      <div class="search-row">
+        <input class="search-input" type="number" id="user-id-input" placeholder="Enter User ID (e.g. 1)"/>
+        <button class="btn-search" onclick="loadUserReport()">Get Report</button>
+      </div>
+      <div id="user-detail-result"><p style="color:var(--muted);font-size:0.84rem;">Enter user ID and click "Get Report"</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8080';
+
+// Load summary
+async function loadSummary() {
+  try {
+    const res = await fetch(`${API}/api/reports/summary`);
+    const data = await res.json();
+    document.getElementById('s-users').textContent = data.totalUsers || 0;
+    document.getElementById('s-stations').textContent = data.totalStations || 0;
+    document.getElementById('s-bookings').textContent = data.totalBookings || 0;
+    document.getElementById('s-revenue').textContent = '₹' + (data.totalRevenue || 0);
+  } catch(e) { console.error(e); }
+}
+
+// Load station wise bookings
+async function loadStationReport() {
+  try {
+    const res = await fetch(`${API}/api/reports/station-wise`);
+    const data = await res.json();
+    const max = Math.max(...data.map(d => d[1]));
+    document.getElementById('station-bars').innerHTML = data.map(d => `
+      <div class="bar-row">
+        <div class="bar-label">${d[0]}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${(d[1]/max)*100}%">${d[1]} bookings</div>
+        </div>
+        <div class="bar-val">${d[1]}</div>
+      </div>`).join('') || '<div class="loading">No data</div>';
+  } catch(e) { document.getElementById('station-bars').innerHTML = '<div class="loading">❌ Error loading</div>'; }
+}
+
+// Load station wise revenue
+async function loadRevenueReport() {
+  try {
+    const res = await fetch(`${API}/api/reports/station-revenue`);
+    const data = await res.json();
+    const max = Math.max(...data.map(d => Number(d[1])));
+    document.getElementById('revenue-bars').innerHTML = data.map(d => `
+      <div class="bar-row">
+        <div class="bar-label">${d[0]}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${(Number(d[1])/max)*100}%;background:#c2410c;">₹${d[1]}</div>
+        </div>
+        <div class="bar-val">₹${d[1]}</div>
+      </div>`).join('') || '<div class="loading">No data</div>';
+  } catch(e) { document.getElementById('revenue-bars').innerHTML = '<div class="loading">❌ Error loading</div>'; }
+}
+
+// Load all payments
+async function loadPaymentReport() {
+  try {
+    const res = await fetch(`${API}/api/payments/all`);
+    const data = await res.json();
+    document.getElementById('payment-tbody').innerHTML = data.length === 0
+      ? '<tr><td colspan="6" class="loading">No payments found</td></tr>'
+      : data.map((p,i) => `
+          <tr>
+            <td class="td-m">${i+1}</td>
+            <td class="td-m">#${p.booking?.bookingId || '—'}</td>
+            <td>${p.booking?.station?.stationName || '—'}</td>
+            <td><strong>₹${p.amount}</strong></td>
+            <td class="td-m">${p.paymentDate || '—'}</td>
+            <td><span class="badge-${p.paymentStatus==='paid'?'green':'orange'}">${p.paymentStatus}</span></td>
+          </tr>`).join('');
+  } catch(e) {}
+}
+
+// Load user wise report
+async function loadUserReport_all() {
+  try {
+    const res = await fetch(`${API}/api/reports/user-wise`);
+    const data = await res.json();
+    document.getElementById('user-tbody').innerHTML = data.length === 0
+      ? '<tr><td colspan="3" class="loading">No data</td></tr>'
+      : data.map((u,i) => `
+          <tr>
+            <td>${u[0]}</td>
+            <td class="td-m">${u[1]}</td>
+            <td><strong>${u[2]} bookings</strong></td>
+          </tr>`).join('');
+  } catch(e) {}
+}
+
+// Load slot wise
+async function loadSlotReport() {
+  try {
+    const res = await fetch(`${API}/api/reports/slot-wise`);
+    const data = await res.json();
+    const max = Math.max(...data.map(d => d[1]));
+    document.getElementById('slot-bars').innerHTML = data.map(d => `
+      <div class="bar-row">
+        <div class="bar-label">${d[0]}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${(d[1]/max)*100}%;background:#7c3aed;">${d[1]} bookings</div>
+        </div>
+        <div class="bar-val">${d[1]}</div>
+      </div>`).join('') || '<div class="loading">No data</div>';
+  } catch(e) {}
+}
+
+// Load individual user report
+async function loadUserReport() {
+  const uid = document.getElementById('user-id-input').value;
+  if (!uid) { alert('User ID daalo!'); return; }
+  try {
+    const res = await fetch(`${API}/api/reports/user/${uid}`);
+    const data = await res.json();
+    const bookings = data.bookings || [];
+    const payments = data.payments || [];
+    document.getElementById('user-detail-result').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+        <div class="sum-card"><div class="sum-icon">📅</div><div class="sum-num">${data.totalBookings}</div><div class="sum-label">Total Bookings</div></div>
+        <div class="sum-card"><div class="sum-icon">💰</div><div class="sum-num">₹${payments.length * 150}</div><div class="sum-label">Total Spent</div></div>
+      </div>
+      <p style="font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:10px;">Booking History:</p>
+      <table class="report-table">
+        <thead><tr><th>Station</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+        <tbody>
+          ${bookings.length === 0
+            ? '<tr><td colspan="4" class="loading">No bookings found</td></tr>'
+            : bookings.map(b => `
+                <tr>
+                  <td>${b[0]}</td>
+                  <td class="td-m">${b[1]}</td>
+                  <td class="td-m">${b[2]}</td>
+                  <td><span class="badge-${b[3]==='confirmed'?'green':'orange'}">${b[3]}</span></td>
+                </tr>`).join('')}
+        </tbody>
+      </table>`;
+  } catch(e) { alert('User not found!'); }
+}
+
+// Show report tab
+function showReport(name, el) {
+  document.querySelectorAll('.report-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  document.getElementById('rep-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// Init
+loadSummary();
+loadStationReport();
+loadRevenueReport();
+loadPaymentReport();
+loadUserReport_all();
+loadSlotReport();
+</script>
+</body>
+</html>
